@@ -1,0 +1,28 @@
+{
+  "version": "0.1.1",
+  "name": "@enva/cli",
+  "license": "MIT",
+  "homepage": "https://github.com/enva-projects/enva-cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enva-projects/enva-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/enva-projects/enva-cli/issues"
+  },
+  "bin": {
+    "enva-create": "./lib/index.js",
+    "e-c": "./lib/index.js"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=4.2.1",
+    "npm": ">=3"
+  },
+  "dependencies": {
+    "@types/node": "^12.11.7",
+    "chalk": "^2.4.2",
+    "enquirer": "^2.3.2",
+    "merge-deep": "^3.0.2"
+  }
+}
