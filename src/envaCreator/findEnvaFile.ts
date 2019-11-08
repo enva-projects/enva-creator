@@ -1,3 +1,9 @@
+// Types
+
+type EnvaFileDescriptor = null | { envaComponentPath: string, type: string }
+
+// -----------------------------------
+
 import {
   execSync
 } from 'child_process';
@@ -8,9 +14,9 @@ const ROOT = '/'
 
 const globalPath = execSync('npm root').toString().trim();
 
-const ENVA_CREATOR_PATH = '.enva/creator'
+const ENVA_CREATOR_PATH = '.enva/creator';
 
-function getEnvaFile(componentName, currentPath): null | { envaComponentPath: string, type: string }{
+function getEnvaFile(componentName: string, currentPath: string): EnvaFileDescriptor {
   const componentPath = path.resolve(currentPath, ENVA_CREATOR_PATH, `${componentName}.enva`);
   const componentWithControllerPath = path.resolve(currentPath, ENVA_CREATOR_PATH, componentName, `controller.enva`);
   if(fs.existsSync(componentPath)) {
@@ -30,12 +36,10 @@ function getEnvaFile(componentName, currentPath): null | { envaComponentPath: st
   return null;
 }
 
-export default function findEnvaFile(componentName, current = process.env.PWD || '.'){
+export default function findEnvaFile(componentName: string, current: string = process.env.PWD || '.'): EnvaFileDescriptor {
   const envaComponent = getEnvaFile(componentName, current)
-  if(envaComponent) {
-    return envaComponent;
-  }
-  if(current === globalPath) return null;
+  if(envaComponent) return envaComponent;
+  else if(current === globalPath) return null;
   else if(current === ROOT) return findEnvaFile(componentName, globalPath);
   else return findEnvaFile(componentName, path.resolve(current, '..'))
 }

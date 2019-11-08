@@ -4,7 +4,7 @@ import path from 'path'
 import putInTemp from '../shared/putInTemp'
 import preprocessEnvaSyntax from '../shared/preprocessEnvaSyntax';
 
-function appendDefaultsToController(content, controllerPath){
+function appendDefaultsToController(content: string, controllerPath: string): string{
   return `
   (async ()=>{
     const fs = require('fs')
@@ -39,7 +39,7 @@ function appendDefaultsToController(content, controllerPath){
   })()`;
 }
 
-export default function preprocessController(controllerPath){
+export default function preprocessController(controllerPath: string): string{
   const content = fs.readFileSync(controllerPath, 'utf-8');
   let finalContent = preprocessEnvaSyntax(content);
   finalContent = appendDefaultsToController(finalContent, path.resolve(controllerPath, '..'));

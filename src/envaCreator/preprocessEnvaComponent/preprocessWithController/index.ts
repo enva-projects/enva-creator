@@ -4,7 +4,7 @@ import fs from 'fs';
 import preprocess from '../shared/preprocessEnvaFile';
 import preprocessController from './preprocessController';
 
-export default function preprocessWithController(envaComponentPath){
+export default function preprocessWithController(envaComponentPath: string): string{
   const root = path.resolve(envaComponentPath, '..');
   const files = fs.readdirSync(root)
   files.forEach((file)=>{

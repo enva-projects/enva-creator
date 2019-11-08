@@ -3,7 +3,7 @@ import fs from 'fs';
 import putInTemp from './putInTemp';
 import preprocessEnvaSyntax from './preprocessEnvaSyntax';
 
-function preprocessValuePrinting(lines){
+function preprocessValuePrinting(lines: string): string{
   const sepratedLines = lines.trim().split('\n')
   return sepratedLines.map(line => {
     if (/^(.*)<=.*>(.*)$/igm.test(line)) {
@@ -13,7 +13,7 @@ function preprocessValuePrinting(lines){
   }).join('\n')
 }
 
-function preprocessRaw(content){
+function preprocessRaw(content: string): string{
   let finalContent = content;
   finalContent = finalContent.replace(/(%>)(.*?)(<%)/gsm, (match, p1, p2, p3)=>{
     return p1 + preprocessValuePrinting(p2) + p3
@@ -32,7 +32,7 @@ function preprocessRaw(content){
   return finalContent;
 }
 
-function appendDefaults(content){
+function appendDefaults(content: string): string{
   return `
   (async ()=>{
     const fs = require('fs')
@@ -56,11 +56,11 @@ function appendDefaults(content){
   })()`;
 }
 
-function preprocessEnvVars(content){
+function preprocessEnvVars(content: string): string{
   return content.replace(/\$\$/g, 'process.env.');
 }
 
-export default function preprocessStandAlone(envaComponentPath){
+export default function preprocessStandAlone(envaComponentPath: string): string{
   const envaFileContent = fs.readFileSync(envaComponentPath, 'utf-8');
   const withEnvs = preprocessEnvVars(envaFileContent);
   const withRaw = preprocessRaw(withEnvs);
