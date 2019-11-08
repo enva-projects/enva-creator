@@ -1,13 +1,15 @@
 import fs from 'fs';
-import path from 'path';
+
+import putInTemp from './putInTemp';
+import preprocessEnvaSyntax from './preprocessEnvaSyntax';
 
 function preprocessValuePrinting(lines){
   const sepratedLines = lines.trim().split('\n')
   return sepratedLines.map(line => {
-    if (/^(.*)<=.*(\$.*)>(.*)$/igm.test(line)) {
-      return line.replace(/^(.*)<=.*(\$.*)>(.*)$/igm, '__raw("$1" + $2 + "$3")')
+    if (/^(.*)<=.*>(.*)$/igm.test(line)) {
+      return line.replace(/^(.*)<=(.*)>(.*)$/igm, '__raw("$1" + $2 + "$3");')
     }
-    return '__raw("' + line + '")'
+    return '__raw("' + line + '");'
   }).join('\n')
 }
 
@@ -22,6 +24,11 @@ function preprocessRaw(content){
   finalContent = finalContent.replace(/(.*%>)(.*)/sm, (match, p1, p2)=>{
     return p1 + preprocessValuePrinting(p2);
   })
+  if(!finalContent.includes('<%') && !finalContent.includes('%>')) {
+    finalContent = finalContent.replace(/.*/igms, (match)=>{
+      return preprocessValuePrinting(match)
+    })
+  }
   return finalContent;
 }
 
@@ -49,22 +56,15 @@ function appendDefaults(content){
   })()`;
 }
 
-function preprocessEnvaSyntaxSections(content){
-  const regexp = /<%(.*?)%>/gms;
-  return content.replace(regexp, '$1').replace(/ask\((.*)\)/igm, '(await ask($1)).value').replace(/ {2,}/g, ' ').trim();
-}
-
-function putInFile(content, componentPath){
-  const componentFileName = componentPath.split('/').pop()
-  const tempPath = path.resolve(componentPath, '..', `.temp.${componentFileName}`);
-  fs.writeFileSync(tempPath, content);
-  return tempPath;
+function preprocessEnvVars(content){
+  return content.replace(/\$\$/g, 'process.env.');
 }
 
 export default function preprocessStandAlone(envaComponentPath){
   const envaFileContent = fs.readFileSync(envaComponentPath, 'utf-8');
-  const withRaw = preprocessRaw(envaFileContent);
-  const withSyntax = preprocessEnvaSyntaxSections(withRaw);
+  const withEnvs = preprocessEnvVars(envaFileContent);
+  const withRaw = preprocessRaw(withEnvs);
+  const withSyntax = preprocessEnvaSyntax(withRaw);
   const withDefaults = appendDefaults(withSyntax);
-  return putInFile(withDefaults, envaComponentPath);
+  return putInTemp(withDefaults, envaComponentPath);
 }

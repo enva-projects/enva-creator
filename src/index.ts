@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
 import envaCreator from './envaCreator';
-envaCreator('a');
+envaCreator('component');
 // export default envaCreator();
