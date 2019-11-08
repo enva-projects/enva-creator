@@ -26,14 +26,26 @@ function appendDefaultsToController(content: string, controllerPath: string): st
         message,
       });
     }
-    function exec(fileName, vars = {}){
+    function dir(dirName){
+      fs.mkdirSync(dirName)
+    }
+    function exec(fileName, vars = {}, directory = null){
       const pth = path.resolve($_HERE, '.temp.' + fileName);
-      execSync('node ' + pth, {
-        env: {
-          ...process.env,
-          ...vars
-        }
-      });
+      if(directory) {
+        execSync('cd ' + directory + '; node ' + pth, {
+          env: {
+            ...process.env,
+            ...vars
+          }
+        });
+      }else {
+        execSync('node ' + pth, {
+          env: {
+            ...process.env,
+            ...vars
+          }
+        });
+      }
     }
     ${content}
   })()`;

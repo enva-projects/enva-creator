@@ -1,3 +1,3 @@
 import envaCreator from './envaCreator';
 
-export default envaCreator;
+module.exports = envaCreator;
