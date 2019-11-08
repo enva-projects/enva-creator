@@ -1,18 +1,14 @@
 {
-  "version": "0.1.1",
-  "name": "@enva/cli",
+  "version": "0.0.1",
+  "name": "@enva/creator",
   "license": "MIT",
-  "homepage": "https://github.com/enva-projects/enva-cli",
+  "homepage": "https://github.com/enva-projects/enva-creator",
   "repository": {
     "type": "git",
-    "url": "https://github.com/enva-projects/enva-cli.git"
+    "url": "https://github.com/enva-projects/enva-creator.git"
   },
   "bugs": {
-    "url": "https://github.com/enva-projects/enva-cli/issues"
-  },
-  "bin": {
-    "enva-create": "./lib/index.js",
-    "e-c": "./lib/index.js"
+    "url": "https://github.com/enva-projects/enva-creator/issues"
   },
   "main": "index.js",
   "engines": {
@@ -21,9 +17,6 @@
   },
   "dependencies": {
     "@types/node": "^12.11.7",
-    "chalk": "^2.4.2",
-    "enquirer": "^2.3.2",
-    "merge-deep": "^3.0.2",
-    "prompts": "^2.2.1"
+    "enquirer": "^2.3.2"
   }
 }
