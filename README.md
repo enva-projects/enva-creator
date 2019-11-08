@@ -55,14 +55,18 @@ Controller is responsible for asking questions and deciding which file to execut
 $NAME = ask('What is the component name?');
 $TYPE = ask('What is the type of it?');
 
+// Will create dir with the name of $NAME
+dir($NAME);
+
 if($TYPE === 'functional'){
+  // Will execute and put functional.enva inside $NAME
   exec('functional.enva', {
     NAME: $NAME
-  });
+  }, $NAME);
 } else {
   exec('class.enva', {
     NAME: $NAME
-  });
+  }, $NAME);
 }
 
 ```
@@ -77,7 +81,7 @@ export default function <=$$NAME>(){
 }
 
 <%
-  output($$NAME + '.js');
+  output('index.js');
 %>
 
 ```
@@ -97,7 +101,7 @@ export default class <=$$NAME>{
 }
 
 <%
-  output($$NAME + '.js');
+  output('index.js');
 %>
 
 ```
